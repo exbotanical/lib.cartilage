@@ -1,5 +1,7 @@
 # lib.cartilage
 
+classical implementations of list and ring data structures for the C programming language
+
 ## Dynamic Linking
 
 Linking to `lib.cartilage`:
