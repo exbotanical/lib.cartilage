@@ -4,26 +4,32 @@
 #include <stdio.h>
 #include <unistd.h>
 
-char __rand_letter(void) {
-	char a;
-
-	do {
-		a = "ABCDEFHIJKLMNOPQRSTUVWXYZ"[random() % 26];
-	} while (!a);
-
-	return a;
-}
-
-Node_t* __new_head(LinkedList* ll, Node_t* node) {
+/**
+ * @brief Bootstrap a new head node
+ * @private
+ *
+ * @param ll
+ * @param node
+ * @return Node_t*
+ */
+Node_t* __new_head(CircularSinglyLinkedList* ll, Node_t* node) {
 	ll->head = node;
 	node->next = ll->head;
 
+	node->list = ll;
 	ll->size++;
-
 	return node;
 }
 
-Node_t* __find_node_before(LinkedList* ll, Node_t* target) {
+/**
+ * @brief Find the node prior to the given target
+ * @private
+ *
+ * @param ll
+ * @param target
+ * @return Node_t*
+ */
+Node_t* __find_node_before(CircularSinglyLinkedList* ll, Node_t* target) {
 	Node_t* tmp = ll->head;
 
 	while (tmp->next != target) {
@@ -35,8 +41,16 @@ Node_t* __find_node_before(LinkedList* ll, Node_t* target) {
 	return tmp;
 }
 
-
-Node_t* __move(LinkedList* ll, Node_t* node, Node_t* at) {
+/**
+ * @brief Move given node after `at`, where `node` and `at` must be a member of the list
+ * @private
+ *
+ * @param ll
+ * @param node
+ * @param at
+ * @return Node_t*
+ */
+Node_t* __move(CircularSinglyLinkedList* ll, Node_t* node, Node_t* at) {
 	Node_t* tmp = __find_node_before(ll, node);
 
 	tmp->next = node->next;
@@ -46,9 +60,30 @@ Node_t* __move(LinkedList* ll, Node_t* node, Node_t* at) {
 	return node;
 }
 
+/**
+ * @brief Generate a new node
+ * @private
+ *
+ * @param value
+ * @return Node_t*
+ */
+Node_t* __make_node(char value) {
+	Node_t* n = malloc(sizeof(Node_t));
 
-LinkedList* make_list(void) {
-	LinkedList* ll = malloc(sizeof(LinkedList));
+	n->data = value;
+	n->next = NULL;
+	n->list = NULL;
+
+	return n;
+}
+
+/**
+ * @brief Instantiate an empty circular singly linked list
+ *
+ * @return CircularSinglyLinkedList*
+ */
+CircularSinglyLinkedList* make_list(void) {
+	CircularSinglyLinkedList* ll = malloc(sizeof(CircularSinglyLinkedList));
 
 	ll->head = NULL;
 	ll->size = 0;
@@ -56,17 +91,45 @@ LinkedList* make_list(void) {
 	return ll;
 }
 
-Node_t* make_node(char value) {
-	Node_t* n = malloc(sizeof(Node_t));
+/**
+ * @brief Returns the previous list node, if extant; else, NULL
+ *
+ * @param ll
+ * @param node
+ * @return Node_t*
+ */
+Node_t* prev(CircularSinglyLinkedList* ll, Node_t* node) {
+	if (!node || !node->list || node->list != ll) return NULL;
 
-	n->data = value;
-	n->next = NULL;
+	Node_t* p = __find_node_before(ll, node);
 
-	return n;
+	return p ? p : NULL;
 }
 
-Node_t* push_back(LinkedList* ll, char value) {
-	Node_t* node = make_node(value);
+/**
+ * @brief Returns the next list node, if extant; else, NULL
+ *
+ * @param ll
+ * @param node
+ * @return Node_t*
+ */
+Node_t* next(CircularSinglyLinkedList* ll, Node_t* node) {
+	if (!node || !node->list || node->list != ll) return NULL;
+
+	Node_t* p = node->next;
+
+	return p ? p : NULL;
+}
+
+/**
+ * @brief Push a new node with value `value` to the back of the list
+ *
+ * @param ll
+ * @param value
+ * @return Node_t*
+ */
+Node_t* push_back(CircularSinglyLinkedList* ll, char value) {
+	Node_t* node = __make_node(value);
 
 	if (!ll->head) return __new_head(ll, node);
 
@@ -79,12 +142,21 @@ Node_t* push_back(LinkedList* ll, char value) {
 
 	node->next = ll->head;
 
+	node->list = ll;
 	ll->size++;
+
 	return node;
 }
 
-Node_t* push_front(LinkedList* ll, char value) {
-	Node_t* node = make_node(value);
+/**
+ * @brief Push a new node with value `value` to the front of the list
+ *
+ * @param ll
+ * @param value
+ * @return Node_t*
+ */
+Node_t* push_front(CircularSinglyLinkedList* ll, char value) {
+	Node_t* node = __make_node(value);
 
 	if (!ll->head) return __new_head(ll, node);
 
@@ -94,15 +166,64 @@ Node_t* push_front(LinkedList* ll, char value) {
 	ll->head = node;
 	tmp->next = ll->head;
 
+	node->list = ll;
 	ll->size++;
+
 	return node;
 }
 
-void print_node_d(Node_t* n) {
-	COUT(n->data);
+/**
+ * @brief Move a given node to its new position after `mark`
+ *
+ * If either the given node or mark are not an element of the list; node == mark; or mark.next == node, the list is not modified
+ *
+ * Both the node and mark must not be NULL
+ *
+ * @param ll
+ * @param node
+ * @param mark
+ * @return int - 0 if success, else -1
+ */
+int move_after (CircularSinglyLinkedList* ll, Node_t* node, Node_t* mark) {
+	if (!node || !mark) return -1;
+
+	if (node->list != ll || node == mark || mark->list != ll) {
+		return -1;
+	}
+
+	if (mark->next == node) return -1;
+
+	__move(ll, node, mark);
+	return 0;
 }
 
-void iterate(LinkedList* ll, void (*callback)(void*)) {
+/**
+ * @brief Move a given node to its new position before `mark`
+ *
+ * If either the given node or mark are not an element of the list; node == mark; or node.next == mark, the list is not modified
+ *
+ * Both the node and mark must not be NULL
+ *
+ * @param ll
+ * @param node
+ * @param mark
+ * @return int - 0 if success, else -1
+ */
+int move_before (CircularSinglyLinkedList* ll, Node_t* node, Node_t* mark) {
+	if (!node || !mark) return -1;
+
+	if (node->list != ll || node == mark || mark->list != ll) {
+		return -1;
+	}
+
+	if (node->next == mark) return -1;
+
+	Node_t* tmp = __find_node_before(ll, mark);
+	__move(ll, node, tmp);
+	return 0;
+}
+
+void iterate(CircularSinglyLinkedList* ll, void (*callback)(void*)) {
 	Node_t* n = ll->head;
 
 	do {

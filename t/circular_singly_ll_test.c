@@ -2,64 +2,120 @@
 
 #include "libcartilage.h"
 
-/* Lifecycle */
+/**
+ * Lifecycle
+ */
 
-int run_test(LinkedList* (*setup)(void), void (*teardown)(LinkedList*), LinkedList* (*test)(LinkedList*)) {
+int run_test(CircularSinglyLinkedList* (*setup)(void), void (*teardown)(CircularSinglyLinkedList*), CircularSinglyLinkedList* (*test)(CircularSinglyLinkedList*)) {
 	teardown(test(setup()));
 }
 
-LinkedList* setup(void) {
+CircularSinglyLinkedList* setup(void) {
 	return make_list();
 }
 
-void teardown(LinkedList* ll) {
+void teardown(CircularSinglyLinkedList* ll) {
 	iterate(ll, free);
 	free(ll);
 }
 
-/* Tests */
+/**
+ * Tests
+ */
 
-LinkedList* test_push_back(LinkedList* ll) {
+CircularSinglyLinkedList* test_push_back(CircularSinglyLinkedList* ll) {
+	DESCRIBE();
+
 	Node_t* n = push_back(ll, 'A');
 
-	describe();
+	ASSERT(n->next == ll->head, "inserts a node as the head when the list is empty");
+	ASSERT(n->next->data == ll->head->data, "maintains rule such that tail->next == head");
 
-	do_assert(n->next == ll->head, "inserts a node as the head when the list is empty");
-	do_assert(n->next->data == ll->head->data, "maintains rule such that tail->next == head");
-
-	do_assert(ll->size == 1, "maintains proper list size");
+	ASSERT(ll->size == 1, "maintains proper list size");
 	return ll;
 }
 
-/* Runner */
+CircularSinglyLinkedList* test_push_back_2(CircularSinglyLinkedList* ll) {
+	DESCRIBE();
 
-int main() {
-	run_test(setup, teardown, test_push_back);
+	int iterations = 4;
+
+	for (int i = iterations; i > 0; i--) {
+		push_back(ll, randch());
+	}
+
+	Node_t* n = push_back(ll, randch());
+
+	ASSERT(n->next == ll->head, "inserts a node as the last node in a non-empty list");
+	ASSERT(ll->size == iterations + 1, "maintains proper list size");
+
+	return ll;
+}
+
+CircularSinglyLinkedList* test_push_front(CircularSinglyLinkedList* ll) {
+	DESCRIBE();
+
+	Node_t *n = push_front(ll, randch());
+
+	ASSERT(n->next == ll->head, "a) inserts a node as the head when the list is empty");
+	ASSERT(n == ll->head->next, "b) inserts a node as the head when the list is empty");
+
+	ASSERT(ll->size == 1, "maintains proper list size");
+
+	return ll;
+}
+
+CircularSinglyLinkedList* test_push_front_2(CircularSinglyLinkedList* ll) {
+	DESCRIBE();
+
+	int iterations = 4;
+
+	for (int i = iterations; i > 0; i--) {
+		push_front(ll, randch());
+	}
+
+	Node_t* n = push_front(ll, randch());
+
+	ASSERT(n == ll->head, "a) inserts a node as the head in a non-empty list");
+	ASSERT(n->next == ll->head->next, "b) inserts a node as the head in a non-empty list");
+
+	ASSERT(ll->size == iterations + 1, "maintains proper list size");
+
+	return ll;
+}
+
+CircularSinglyLinkedList* test_head(CircularSinglyLinkedList* ll) {
+	DESCRIBE();
+	char value = 'z';
+
+	Node_t* n = push_front(ll, value);
+
+	ASSERT(value == ll->head->data, "value congruence");
+	ASSERT(value == n->data, "value congruence");
+
+	push_front(ll, randch());
+	push_front(ll, randch());
+	push_front(ll, randch());
+
+	Node_t *n1 = push_front(ll, value);
+
+	ASSERT(n1 == ll->head, "a) sets the new head of the list");
+	ASSERT(value == ll->head->next->data, "b) sets the new head of the list");
+	ASSERT(value == (prev(ll, ll->head))->data, "c) sets the new head of the list");
+
+	ASSERT(ll->size == 5, "maintains proper list size");
+
+	return ll;
 }
 
 
-// test(`${subject} (pushBack) should insert a node as the head when the list is empty`, t => {
-// 	const l = init();
+/**
+ * Runner
+ */
 
-// 	const n = l.pushBack(1);
-
-// 	t.equals(n.next, l.head);
-// 	t.equals(n, l.head.next);
-// 	t.equals(l.size(), 1);
-// 	t.end();
-// });
-
-
-// test(`${subject} (pushBack) should insert a node as the last node in a non-empty list`, t => {
-// 	const l = init();
-
-// 	l.pushBack(1);
-// 	l.pushBack(2);
-// 	l.pushBack(3);
-// 	l.pushBack(4);
-// 	const n = l.pushBack(5);
-
-// 	t.equals(n.next, l.head);
-// 	t.equals(l.size(), 5);
-// 	t.end();
-// });
+int main() {
+	run_test(setup, teardown, test_push_back);
+	run_test(setup, teardown, test_push_back_2);
+	run_test(setup, teardown, test_push_front);
+	run_test(setup, teardown, test_push_front_2);
+}

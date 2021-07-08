@@ -2,7 +2,7 @@ set -o errexit
 set -o nounset
 
 RED='\033[0;31m'
-GREEN='\033[0;32m'
+GREEN='\033[1;32m'
 YELLOW='\033[0;33m'
 
 DEFAULT='\033[0m'
