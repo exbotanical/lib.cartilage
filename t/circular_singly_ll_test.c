@@ -1,7 +1,7 @@
 #include "test_util.h"
 
 #include "libcartilage.h"
-
+#include <stdarg.h>
 
 /**
  * Environment
@@ -26,6 +26,27 @@ LinkedList* setup(void) {
 void teardown(LinkedList* ll) {
 	iterate(ll, free);
 	free(ll);
+}
+
+void try_fail(LinkedList* ll, int nodes_n, ...) {
+	va_list args;
+
+	va_start(args, nodes_n);
+
+	Node* tmp = ll->head;
+
+	int iterations = nodes_n;
+
+	do {
+		Node* nN = va_arg(args, Node*);
+
+		assert(tmp == nN);
+		tmp = tmp->next;
+	} while (--iterations);
+
+	ASSERT(ll->size == nodes_n, "has the expected list order and size");
+
+	va_end(args);
 }
 
 /**
@@ -119,72 +140,75 @@ LinkedList* test_head(LinkedList* ll) {
 
 LinkedList* test_multi_node_ll(LinkedList* ll) {
 	DESCRIBE();
+	Node* n2 = push_front(ll, randch());
 	Node* n1 = push_front(ll, randch());
 	Node* n3 = push_back(ll, randch());
 	Node* n4 = push_back(ll, randch());
 
-	// try_fail(ll, [ n1, n2, n3, n4 ]);
+	try_fail(ll, 4, n1, n2, n3, n4);
 
-	// remove(ll, n2);
-	// try_fail(l, [ n1, n3, n4 ]);
+	remove_node(ll, n2);
+	try_fail(ll, 3, n1, n3, n4);
 
-	// remove(ll, n2);
-	// try_fail(l, [ n1, n3, n4 ]);
+	remove_node(ll, n2);
+	try_fail(ll, 3, n1, n3, n4);
 
-	// remove(ll, head());
-	// try_fail(l, [ n3, n4 ]);circular
+	remove_node(ll, ll->head);
+	try_fail(ll, 2, n3, n4);
 
-	// const t1 = pop(ll);
+	Node* t1 = pop(ll);
 
-	// ASSERT(t1, n4);
-	// try_fail(l, [n3]);
+	assert(t1 == n4);
+	try_fail(ll, 1, n3);
 
-	// ASSERT(insert_after(ll, 2, t1), null); // no-op
+	assert(insert_after(ll, randch(), t1) == NULL); // no-op
 
-	// ASSERT(l.head, l.prev(l.head)); // head = tail
+	assert(ll->head == prev(ll, ll->head)); // head = tail
 
-	// n2 = insert_after(ll, 2, n3) // insert after tail
-	// 		 try_fail(l, [ n3, n2 ]);
-	// ASSERT(l.prev(l.head), n2);
-	// ASSERT(l.head, n3);
+	n2 = insert_after(ll, randch(), n3); // insert after tail
+	try_fail(ll, 2, n3, n2);
 
-	// n4 = insert_after(ll, 4, n2) // insert after tail
-	// 		 try_fail(l, [ n3, n2, n4 ]);
-	// ASSERT(n4.next, l.head);
-	// ASSERT(l.prev(n3), n4);
+	assert(prev(ll, ll->head) == n2);
+	assert(ll->head == n3);
 
-	// let n5 = insert_after(ll, 5, n2); // insert after head
-	// try_fail(l, [ n3, n2, n5, n4 ]);
+	n4 = insert_after(ll, 4, n2); // insert after tail
+	try_fail(ll, 3, n3, n2, n4);
+	assert(n4->next == ll->head);
+	assert(prev(ll, n3) == n4);
 
-	// remove(ll, n2);
-	// n2 = insert_after(ll, 2, n5); // insert after middle
-	// try_fail(l, [ n3, n5, n2, n4 ]);
+	Node *n5 = insert_after(ll, randch(), n2); // insert after head
+	try_fail(ll, 4, n3, n2, n5, n4);
 
-	// remove(ll, n2);
-	// n2 = insert_after(ll, 2, n4); // insert after tail
-	// try_fail(l, [ n3, n5, n4, n2 ]);
+	remove_node(ll, n2);
+	n2 = insert_after(ll, randch(), n5); // insert after middle
+	try_fail(ll, 4, n3, n5, n2, n4);
 
-	// remove(ll, n2);
+	remove_node(ll, n2);
+	n2 = insert_after(ll, randch(), n4); // insert after tail
+	try_fail(ll, 4, n3, n5, n4, n2);
 
-	// pop(ll);
+	remove_node(ll, n2);
 
-	// try_fail(l, [ n3, n5 ]);
+	pop(ll);
 
-	// ASSERT(pop(ll), n5);
-	// ASSERT(pop(ll), n3);
-	// ASSERT(pop(ll), null); // no-op
-	// ASSERT(l.size(), 0);
+	try_fail(ll, 2, n3, n5);
 
-	// ASSERT(l.insertBefore(11, n5), null); // no-op
+	assert(pop(ll) == n5);
+	assert(pop(ll) == n3);
+	assert(pop(ll) == NULL); // no-op
+	assert(ll->size == 0);
 
-	// let m2 = l.push_front(22);
-	// let m3 = l.push_back(33);
-	// let m1 = l.push_front(11);
+	assert(insert_before(ll, randch(), n5) == NULL); // no-op
 
-	// try_fail(l, [ m1, m2, m3 ]);
+	Node* m2 = push_front(ll, randch());
+	Node* m3 = push_back(ll, randch());
+	Node* m1 = push_front(ll, randch());
 
-	// t.end();
+	try_fail(ll, 3, m1, m2, m3);
+
+	return ll;
 }
+
 /**
  * Runner
  */
@@ -194,4 +218,5 @@ int main() {
 	run_test(setup, teardown, test_push_back_2);
 	run_test(setup, teardown, test_push_front);
 	run_test(setup, teardown, test_push_front_2);
+	run_test(setup, teardown, test_multi_node_ll);
 }

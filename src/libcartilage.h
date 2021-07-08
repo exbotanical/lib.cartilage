@@ -33,4 +33,12 @@ void iterate(CircularSinglyLinkedList* ll, void (*callback)(void*));
 
 ForwardNode_t* prev(CircularSinglyLinkedList* ll, ForwardNode_t* node);
 
+ForwardNode_t* remove_node(CircularSinglyLinkedList* ll, ForwardNode_t* node);
+
+ForwardNode_t* pop(CircularSinglyLinkedList* ll);
+
+ForwardNode_t* insert_after(CircularSinglyLinkedList* ll, char value, ForwardNode_t* mark);
+
+ForwardNode_t* insert_before(CircularSinglyLinkedList* ll, char value, ForwardNode_t* mark);
+
 #endif

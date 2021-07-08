@@ -223,6 +223,119 @@ int move_before (CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_
 	return 0;
 }
 
+/**
+ * @brief Remove a given node from the list
+ *
+ * @param ll
+ * @param node
+ * @return ForwardNode_t*
+ */
+ForwardNode_t* remove_node(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
+	if (!ll->head || !node) return NULL;
+
+	if (node->list != ll) return NULL;
+
+	ForwardNode_t* tmp1 = ll->head;
+	ForwardNode_t* tmp2 = NULL;
+
+	while (tmp1 != node) {
+		tmp2 = tmp1;
+		tmp1 = tmp1->next;
+	}
+
+	if (tmp1 == ll->head) {
+		tmp2 = ll->head;
+
+		while (tmp2->next != ll->head) tmp2 = tmp2->next;
+
+		ll->head = ll->head->next;
+		tmp2->next = ll->head;
+	} else {
+		tmp2->next = tmp1->next;
+	}
+
+	node->list = NULL;
+
+	ll->size--;
+
+	return node;
+}
+
+/**
+ * @brief Remove the last node from the list
+ *
+ * @param ll
+ * @return ForwardNode_t*
+ */
+ForwardNode_t* pop(CircularSinglyLinkedList* ll) {
+	if (!ll->head) return NULL;
+
+	ForwardNode_t* tmp = ll->head;
+
+	while (tmp->next != ll->head) tmp = tmp->next;
+
+	return remove_node(ll, tmp);
+}
+
+/**
+ * @brief Insert a new node with value `value` immediately after `mark`
+ *
+ * If `mark` is not an element of the list, the list is not modified
+ *
+ * `mark` must not be NULL
+ *
+ * @param ll
+ * @param value
+ * @param mark
+ * @return ForwardNode_t*
+ */
+ForwardNode_t* insert_after(CircularSinglyLinkedList* ll, char value, ForwardNode_t* mark) {
+	if (!mark || mark->list != ll) return NULL;
+
+	ForwardNode_t* n = __make_node(value);
+
+	if (!ll->head) return __new_head(ll, n);
+
+	ForwardNode_t* tmp = __find_node_before(ll, mark->next);
+
+	if (tmp->next == ll->head) {
+		tmp->next = n;
+		n->next = ll->head;
+	} else {
+		n->next = tmp->next;
+		tmp->next = n;
+	}
+
+	n->list = ll;
+	ll->size++;
+
+	return n;
+}
+
+/**
+ * @brief Insert a new node with value `value` immediately before `mark`
+ *
+ * If `mark` is not an element of the list, the list is not modified
+ *
+ * `mark` must not be NULL
+ *
+ * @param ll
+ * @param value
+ * @param mark
+ * @return ForwardNode_t*
+ */
+ForwardNode_t* insert_before(CircularSinglyLinkedList* ll, char value, ForwardNode_t* mark) {
+	if (!mark || mark->list != ll) return NULL;
+
+	return insert_after(ll, value, prev(ll, mark));
+}
+
+/**
+ * @brief Iterate over the list and invoke `callback` with each node
+ *
+ * @param ll
+ * @param callback
+ */
 void iterate(CircularSinglyLinkedList* ll, void (*callback)(void*)) {
 	ForwardNode_t* n = ll->head;
 
