@@ -26,7 +26,7 @@ void teardown(CircularSinglyLinkedList* ll) {
 CircularSinglyLinkedList* test_push_back(CircularSinglyLinkedList* ll) {
 	DESCRIBE();
 
-	Node_t* n = push_back(ll, 'A');
+	ForwardNode_t* n = push_back(ll, 'A');
 
 	ASSERT(n->next == ll->head, "inserts a node as the head when the list is empty");
 	ASSERT(n->next->data == ll->head->data, "maintains rule such that tail->next == head");
@@ -44,7 +44,7 @@ CircularSinglyLinkedList* test_push_back_2(CircularSinglyLinkedList* ll) {
 		push_back(ll, randch());
 	}
 
-	Node_t* n = push_back(ll, randch());
+	ForwardNode_t* n = push_back(ll, randch());
 
 	ASSERT(n->next == ll->head, "inserts a node as the last node in a non-empty list");
 	ASSERT(ll->size == iterations + 1, "maintains proper list size");
@@ -55,7 +55,7 @@ CircularSinglyLinkedList* test_push_back_2(CircularSinglyLinkedList* ll) {
 CircularSinglyLinkedList* test_push_front(CircularSinglyLinkedList* ll) {
 	DESCRIBE();
 
-	Node_t *n = push_front(ll, randch());
+	ForwardNode_t *n = push_front(ll, randch());
 
 	ASSERT(n->next == ll->head, "a) inserts a node as the head when the list is empty");
 	ASSERT(n == ll->head->next, "b) inserts a node as the head when the list is empty");
@@ -74,7 +74,7 @@ CircularSinglyLinkedList* test_push_front_2(CircularSinglyLinkedList* ll) {
 		push_front(ll, randch());
 	}
 
-	Node_t* n = push_front(ll, randch());
+	ForwardNode_t* n = push_front(ll, randch());
 
 	ASSERT(n == ll->head, "a) inserts a node as the head in a non-empty list");
 	ASSERT(n->next == ll->head->next, "b) inserts a node as the head in a non-empty list");
@@ -88,7 +88,7 @@ CircularSinglyLinkedList* test_head(CircularSinglyLinkedList* ll) {
 	DESCRIBE();
 	char value = 'z';
 
-	Node_t* n = push_front(ll, value);
+	ForwardNode_t* n = push_front(ll, value);
 
 	ASSERT(value == ll->head->data, "value congruence");
 	ASSERT(value == n->data, "value congruence");
@@ -97,7 +97,7 @@ CircularSinglyLinkedList* test_head(CircularSinglyLinkedList* ll) {
 	push_front(ll, randch());
 	push_front(ll, randch());
 
-	Node_t *n1 = push_front(ll, value);
+	ForwardNode_t *n1 = push_front(ll, value);
 
 	ASSERT(n1 == ll->head, "a) sets the new head of the list");
 	ASSERT(value == ll->head->next->data, "b) sets the new head of the list");

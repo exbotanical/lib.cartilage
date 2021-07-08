@@ -6,27 +6,31 @@
 #define COUT(c) printf(#c " = %c\n", c)
 #define DOUT(c) printf(#c " = %d\n", c)
 
+/*****************************
+ *	CircularSinglyLinkedList
+ *****************************/
+
 typedef struct CircularSinglyLinkedList;
 
-typedef struct Node {
+typedef struct ForwardNode {
 	char data;
-	struct Node* next;
+	struct ForwardNode* next;
 	struct CircularSinglyLinkedList* list;
-} Node_t;
+} ForwardNode_t;
 
 typedef struct CircularSinglyLinkedList {
-	Node_t* head;
+	ForwardNode_t* head;
 	uint32_t size;
 } CircularSinglyLinkedList;
 
 CircularSinglyLinkedList* make_list(void);
 
-Node_t* push_back(CircularSinglyLinkedList* ll, char value);
+ForwardNode_t* push_back(CircularSinglyLinkedList* ll, char value);
 
-Node_t* push_front(CircularSinglyLinkedList* ll, char value);
+ForwardNode_t* push_front(CircularSinglyLinkedList* ll, char value);
 
 void iterate(CircularSinglyLinkedList* ll, void (*callback)(void*));
 
-Node_t* prev(CircularSinglyLinkedList* ll, Node_t* node);
+ForwardNode_t* prev(CircularSinglyLinkedList* ll, ForwardNode_t* node);
 
 #endif
