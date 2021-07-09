@@ -184,7 +184,7 @@ ForwardNode_t* push_front(CircularSinglyLinkedList* ll, char value) {
  * @param mark
  * @return int - 0 if success, else -1
  */
-int move_after (CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark) {
+int move_after(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark) {
 	if (!node || !mark) return -1;
 
 	if (node->list != ll || node == mark || mark->list != ll) {
@@ -209,7 +209,7 @@ int move_after (CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t
  * @param mark
  * @return int - 0 if success, else -1
  */
-int move_before (CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark) {
+int move_before(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark) {
 	if (!node || !mark) return -1;
 
 	if (node->list != ll || node == mark || mark->list != ll) {
@@ -331,6 +331,48 @@ ForwardNode_t* insert_before(CircularSinglyLinkedList* ll, char value, ForwardNo
 }
 
 /**
+ * @brief Insert a copy of another list at the back of the caller list
+ *
+ * The lists may be the same, but must not be NULL
+ *
+ * @param ll
+ * @param other
+ * @return CircularSinglyLinkedList*
+ */
+CircularSinglyLinkedList* push_back_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other) {
+	if (!other || !ll) return NULL;
+
+	ForwardNode_t* n = other->head;
+
+	for (int i = other->size; i > 0; i--, n = next(other, n)) {
+		push_back(ll, n->data);
+	}
+
+	return ll;
+}
+
+/**
+ * @brief Insert a copy of another list at the front of the caller list
+ *
+ * The lists may be the same, but must not be NULL
+ *
+ * @param ll
+ * @param other
+ * @return CircularSinglyLinkedList*
+ */
+CircularSinglyLinkedList* push_front_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other) {
+	if (!other || !ll) return NULL;
+
+	ForwardNode_t* n = prev(other, other->head);
+
+	for (int i = other->size; i > 0; i--, n = prev(other, n)) {
+		push_front(ll, n->data);
+	}
+
+	return ll;
+}
+
+/**
  * @brief Iterate over the list and invoke `callback` with each node
  *
  * @param ll
@@ -342,5 +384,5 @@ void iterate(CircularSinglyLinkedList* ll, void (*callback)(void*)) {
 	do {
 		callback(n);
 		n = n->next;
-	} while (n->next && n->next != ll->head);
+	} while (n->next && n != ll->head);
 }

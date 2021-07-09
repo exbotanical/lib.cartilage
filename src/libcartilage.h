@@ -25,11 +25,15 @@ typedef struct CircularSinglyLinkedList {
 
 CircularSinglyLinkedList* make_list(void);
 
+ForwardNode_t* __make_node(char value);
+
 ForwardNode_t* push_back(CircularSinglyLinkedList* ll, char value);
 
 ForwardNode_t* push_front(CircularSinglyLinkedList* ll, char value);
 
 void iterate(CircularSinglyLinkedList* ll, void (*callback)(void*));
+
+ForwardNode_t* next(CircularSinglyLinkedList* ll, ForwardNode_t* node);
 
 ForwardNode_t* prev(CircularSinglyLinkedList* ll, ForwardNode_t* node);
 
@@ -40,5 +44,13 @@ ForwardNode_t* pop(CircularSinglyLinkedList* ll);
 ForwardNode_t* insert_after(CircularSinglyLinkedList* ll, char value, ForwardNode_t* mark);
 
 ForwardNode_t* insert_before(CircularSinglyLinkedList* ll, char value, ForwardNode_t* mark);
+
+int move_before(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark);
+
+int move_after(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark);
+
+CircularSinglyLinkedList* push_back_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other);
+
+CircularSinglyLinkedList* push_front_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other);
 
 #endif
