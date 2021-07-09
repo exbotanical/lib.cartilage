@@ -67,7 +67,7 @@ ForwardNode_t* __move(CircularSinglyLinkedList* ll, ForwardNode_t* node, Forward
  * @param value
  * @return ForwardNode_t*
  */
-ForwardNode_t* __make_node(char value) {
+ForwardNode_t* __make_node(void* value) {
 	ForwardNode_t* n = malloc(sizeof(ForwardNode_t));
 
 	n->data = value;
@@ -128,7 +128,7 @@ ForwardNode_t* next(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
  * @param value
  * @return ForwardNode_t*
  */
-ForwardNode_t* push_back(CircularSinglyLinkedList* ll, char value) {
+ForwardNode_t* push_back(CircularSinglyLinkedList* ll, void* value) {
 	ForwardNode_t* node = __make_node(value);
 
 	if (!ll->head) return __new_head(ll, node);
@@ -155,7 +155,7 @@ ForwardNode_t* push_back(CircularSinglyLinkedList* ll, char value) {
  * @param value
  * @return ForwardNode_t*
  */
-ForwardNode_t* push_front(CircularSinglyLinkedList* ll, char value) {
+ForwardNode_t* push_front(CircularSinglyLinkedList* ll, void* value) {
 	ForwardNode_t* node = __make_node(value);
 
 	if (!ll->head) return __new_head(ll, node);
@@ -289,7 +289,7 @@ ForwardNode_t* pop(CircularSinglyLinkedList* ll) {
  * @param mark
  * @return ForwardNode_t*
  */
-ForwardNode_t* insert_after(CircularSinglyLinkedList* ll, char value, ForwardNode_t* mark) {
+ForwardNode_t* insert_after(CircularSinglyLinkedList* ll, void* value, ForwardNode_t* mark) {
 	if (!mark || mark->list != ll) return NULL;
 
 	ForwardNode_t* n = __make_node(value);
@@ -324,7 +324,7 @@ ForwardNode_t* insert_after(CircularSinglyLinkedList* ll, char value, ForwardNod
  * @param mark
  * @return ForwardNode_t*
  */
-ForwardNode_t* insert_before(CircularSinglyLinkedList* ll, char value, ForwardNode_t* mark) {
+ForwardNode_t* insert_before(CircularSinglyLinkedList* ll, void* value, ForwardNode_t* mark) {
 	if (!mark || mark->list != ll) return NULL;
 
 	return insert_after(ll, value, prev(ll, mark));
