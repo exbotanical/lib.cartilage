@@ -32,7 +32,7 @@ void teardown(LinkedList* ll) {
  * Helpers
  */
 
-void try_fail(LinkedList* ll, int nodes_n, ...) {
+void assert_ordinal_pointers(LinkedList* ll, int nodes_n, ...) {
 	va_list args;
 
 	va_start(args, nodes_n);
@@ -53,7 +53,7 @@ void try_fail(LinkedList* ll, int nodes_n, ...) {
 	va_end(args);
 }
 
-void try_fail_data(LinkedList* ll, int vals_n, ...) {
+void assert_ordinal_data(LinkedList* ll, int vals_n, ...) {
 	va_list args;
 
 	va_start(args, vals_n);
@@ -171,53 +171,53 @@ LinkedList* test_multi_node_ll(LinkedList* ll) {
 	Node* n3 = push_back(ll, (void*)randch());
 	Node* n4 = push_back(ll, (void*)randch());
 
-	try_fail(ll, 4, n1, n2, n3, n4);
+	assert_ordinal_pointers(ll, 4, n1, n2, n3, n4);
 
 	remove_node(ll, n2);
-	try_fail(ll, 3, n1, n3, n4);
+	assert_ordinal_pointers(ll, 3, n1, n3, n4);
 
 	remove_node(ll, n2);
-	try_fail(ll, 3, n1, n3, n4);
+	assert_ordinal_pointers(ll, 3, n1, n3, n4);
 
 	remove_node(ll, ll->head);
-	try_fail(ll, 2, n3, n4);
+	assert_ordinal_pointers(ll, 2, n3, n4);
 
 	Node* t1 = pop(ll);
 
 	assert(t1 == n4);
-	try_fail(ll, 1, n3);
+	assert_ordinal_pointers(ll, 1, n3);
 
 	assert(insert_after(ll, (void*)randch(), t1) == NULL); // no-op
 
 	assert(ll->head == prev(ll, ll->head)); // head = tail
 
 	n2 = insert_after(ll, (void*)randch(), n3); // insert after tail
-	try_fail(ll, 2, n3, n2);
+	assert_ordinal_pointers(ll, 2, n3, n2);
 
 	assert(prev(ll, ll->head) == n2);
 	assert(ll->head == n3);
 
 	n4 = insert_after(ll, 4, n2); // insert after tail
-	try_fail(ll, 3, n3, n2, n4);
+	assert_ordinal_pointers(ll, 3, n3, n2, n4);
 	assert(n4->next == ll->head);
 	assert(prev(ll, n3) == n4);
 
 	Node *n5 = insert_after(ll, (void*)randch(), n2); // insert after head
-	try_fail(ll, 4, n3, n2, n5, n4);
+	assert_ordinal_pointers(ll, 4, n3, n2, n5, n4);
 
 	remove_node(ll, n2);
 	n2 = insert_after(ll, (void*)randch(), n5); // insert after middle
-	try_fail(ll, 4, n3, n5, n2, n4);
+	assert_ordinal_pointers(ll, 4, n3, n5, n2, n4);
 
 	remove_node(ll, n2);
 	n2 = insert_after(ll, (void*)randch(), n4); // insert after tail
-	try_fail(ll, 4, n3, n5, n4, n2);
+	assert_ordinal_pointers(ll, 4, n3, n5, n4, n2);
 
 	remove_node(ll, n2);
 
 	pop(ll);
 
-	try_fail(ll, 2, n3, n5);
+	assert_ordinal_pointers(ll, 2, n3, n5);
 
 	assert(pop(ll) == n5);
 	assert(pop(ll) == n3);
@@ -230,7 +230,7 @@ LinkedList* test_multi_node_ll(LinkedList* ll) {
 	Node* m3 = push_back(ll, (void*)randch());
 	Node* m1 = push_front(ll, (void*)randch());
 
-	try_fail(ll, 3, m1, m2, m3);
+	assert_ordinal_pointers(ll, 3, m1, m2, m3);
 
 	return ll;
 }
@@ -275,21 +275,21 @@ LinkedList* test_extensibility(LinkedList* ll) {
 	push_back(l2, (void*)'E');
 
 	push_back_list(l3, ll); // merge into an empty list
-	try_fail_data(l3, 3, 'A', 'B', 'C');
+	assert_ordinal_data(l3, 3, 'A', 'B', 'C');
 
 	ASSERT(l3->size == ll->size, "lists remain congruent");
 
 	push_back_list(l3, l2);
-	try_fail_data(l3, 5, 'A', 'B', 'C', 'D', 'E');
+	assert_ordinal_data(l3, 5, 'A', 'B', 'C', 'D', 'E');
 
 	push_front_list(l4, l2); // merge into an empty list
-	try_fail_data(l4, 2, 'D', 'E');
+	assert_ordinal_data(l4, 2, 'D', 'E');
 
 	push_front_list(l4, ll);
-	try_fail_data(l4, 5, 'A', 'B', 'C', 'D', 'E');
+	assert_ordinal_data(l4, 5, 'A', 'B', 'C', 'D', 'E');
 
-	try_fail_data(ll, 3, 'A', 'B', 'C');
-	try_fail_data(l2, 2, 'D', 'E');
+	assert_ordinal_data(ll, 3, 'A', 'B', 'C');
+	assert_ordinal_data(l2, 2, 'D', 'E');
 
 	teardown(l2);
 	teardown(l3);
@@ -305,15 +305,15 @@ LinkedList* test_removal(LinkedList* ll) {
 	Node* n1 = push_back(ll, (void*)'A');
 	Node* n2 = push_back(ll, (void*)'B');
 
-	try_fail(ll, 2, n1, n2);
+	assert_ordinal_pointers(ll, 2, n1, n2);
 
 	Node* n = ll->head;
 
 	remove_node(ll, n);
-	try_fail(ll, 1, n2);
+	assert_ordinal_pointers(ll, 1, n2);
 
 	remove_node(ll, n);
-	try_fail(ll, 1, n2);
+	assert_ordinal_pointers(ll, 1, n2);
 
 	ASSERT(1 == 1, "maintains integrity across varietied removals");
 
@@ -358,22 +358,22 @@ LinkedList* test_move(LinkedList* ll) {
 	Node* n4 = push_back(ll, (void*)'D');
 
 	move_after(ll, n3, n3); // noop
-	try_fail(ll, 4, n1, n2, n3, n4);
+	assert_ordinal_pointers(ll, 4, n1, n2, n3, n4);
 
 	move_before(ll, n2, n2); // noop
-	try_fail(ll, 4, n1, n2, n3, n4);
+	assert_ordinal_pointers(ll, 4, n1, n2, n3, n4);
 
 	move_after(ll, n3, n2); // noop
-	try_fail(ll, 4, n1, n2, n3, n4);
+	assert_ordinal_pointers(ll, 4, n1, n2, n3, n4);
 
 	move_before(ll, n2, n3); // noop
-	try_fail(ll, 4, n1, n2, n3, n4);
+	assert_ordinal_pointers(ll, 4, n1, n2, n3, n4);
 
 	move_before(ll, n2, n4);
-	try_fail(ll, 4, n1, n3, n2, n4);
+	assert_ordinal_pointers(ll, 4, n1, n3, n2, n4);
 
 	move_before(ll, n4, n1);
-	try_fail(ll, 4, n1, n3, n2, n4);
+	assert_ordinal_pointers(ll, 4, n1, n3, n2, n4);
 
 	ASSERT(1 == 1, "maintains integrity across varietied moves");
 
@@ -388,7 +388,7 @@ LinkedList* test_modification(LinkedList* ll) {
 	push_back(ll, (void*)'C');
 	insert_after(ll, (void*)randch(), __make_node((void*)randch()));
 
-	try_fail_data(ll, 3, 'A', 'B', 'C');
+	assert_ordinal_data(ll, 3, 'A', 'B', 'C');
 
 	ASSERT(1 == 1, "is not modified when invoking 'insert_after' with a mark that is not a node thereof");
 
@@ -399,12 +399,12 @@ LinkedList* test_modification(LinkedList* ll) {
 	Node* n2 = push_back(l2, (void*)'B');
 
 	move_after(l1, n1, n2);
-	try_fail_data(l1, 1, 'A');
-	try_fail_data(l2, 1, 'B');
+	assert_ordinal_data(l1, 1, 'A');
+	assert_ordinal_data(l2, 1, 'B');
 
 	move_before(l1, n1, n2);
-	try_fail_data(l1, 1, 'A');
-	try_fail_data(l2, 1, 'B');
+	assert_ordinal_data(l1, 1, 'A');
+	assert_ordinal_data(l2, 1, 'B');
 
 	ASSERT(1 == 1, "is not modified when invoking 'move_after', 'move_before' with a mark that is not a node thereof");
 
@@ -441,18 +441,18 @@ LinkedList* test_single_node_ll(LinkedList* ll) {
 	ASSERT(next(ll, n) == n, "points to itself");
 	ASSERT(prev(ll, n) == n, "points to itself");
 
-	try_fail(ll, 1, n);
+	assert_ordinal_pointers(ll, 1, n);
 
 	LinkedList* l2 = make_list();
 	Node* n2 = push_front(l2, (void*)'A');
 
-	try_fail(l2, 1, n2);
+	assert_ordinal_pointers(l2, 1, n2);
 
 	push_front_list(ll, l2);
-	try_fail_data(ll, 2, 'A', 'B');
+	assert_ordinal_data(ll, 2, 'A', 'B');
 
 	push_back_list(ll, l2);
-	try_fail_data(ll, 3, 'A', 'B', 'A');
+	assert_ordinal_data(ll, 3, 'A', 'B', 'A');
 
 	LinkedList* l3 = make_list();
 
@@ -461,7 +461,7 @@ LinkedList* test_single_node_ll(LinkedList* ll) {
 	ASSERT(next(l3, n3) == n3, "points to itself");
 	ASSERT(prev(l3, n3) == n3, "points to itself");
 
-	try_fail(l3, 1, n3);
+	assert_ordinal_pointers(l3, 1, n3);
 
 	ASSERT(1 == 1, "maintains integrity when operating upon a single-node list");
 
