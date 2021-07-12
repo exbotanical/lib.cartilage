@@ -1,3 +1,14 @@
+/**
+ * @file circular_singly_ll.c
+ * @author Matthew Zito (goldmund@freenode)
+ * @brief Implements a Circular Singly Linked List
+ * @version 0.1
+ * @date 2021-07-11
+ *
+ * @copyright Copyright (c) 2021 Matthew Zito (goldmund)
+ *
+ */
+
 #include "libcartilage.h"
 
 #include <stdlib.h>
@@ -12,7 +23,7 @@
  * @param node
  * @return ForwardNode_t*
  */
-ForwardNode_t* __new_head(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
+ForwardNode_t* __csll_new_head(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
 	ll->head = node;
 	node->next = ll->head;
 
@@ -29,7 +40,7 @@ ForwardNode_t* __new_head(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
  * @param target
  * @return ForwardNode_t*
  */
-ForwardNode_t* __find_node_before(CircularSinglyLinkedList* ll, ForwardNode_t* target) {
+ForwardNode_t* __csll_find_node_before(CircularSinglyLinkedList* ll, ForwardNode_t* target) {
 	ForwardNode_t* tmp = ll->head;
 
 	while (tmp->next != target) {
@@ -50,8 +61,8 @@ ForwardNode_t* __find_node_before(CircularSinglyLinkedList* ll, ForwardNode_t* t
  * @param at
  * @return ForwardNode_t*
  */
-ForwardNode_t* __move(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* at) {
-	ForwardNode_t* tmp = __find_node_before(ll, node);
+ForwardNode_t* __csll_move(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* at) {
+	ForwardNode_t* tmp = __csll_find_node_before(ll, node);
 
 	tmp->next = node->next;
 	node->next = at->next;
@@ -67,7 +78,7 @@ ForwardNode_t* __move(CircularSinglyLinkedList* ll, ForwardNode_t* node, Forward
  * @param value
  * @return ForwardNode_t*
  */
-ForwardNode_t* __make_node(void* value) {
+ForwardNode_t* __csll_make_node(void* value) {
 	ForwardNode_t* n = malloc(sizeof(ForwardNode_t));
 
 	n->data = value;
@@ -82,7 +93,7 @@ ForwardNode_t* __make_node(void* value) {
  *
  * @return CircularSinglyLinkedList*
  */
-CircularSinglyLinkedList* make_list(void) {
+CircularSinglyLinkedList* csll_make_list(void) {
 	CircularSinglyLinkedList* ll = malloc(sizeof(CircularSinglyLinkedList));
 
 	ll->head = NULL;
@@ -98,10 +109,10 @@ CircularSinglyLinkedList* make_list(void) {
  * @param node
  * @return ForwardNode_t*
  */
-ForwardNode_t* prev(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
+ForwardNode_t* csll_prev(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
 	if (!node || !node->list || node->list != ll) return NULL;
 
-	ForwardNode_t* p = __find_node_before(ll, node);
+	ForwardNode_t* p = __csll_find_node_before(ll, node);
 
 	return p ? p : NULL;
 }
@@ -113,7 +124,7 @@ ForwardNode_t* prev(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
  * @param node
  * @return ForwardNode_t*
  */
-ForwardNode_t* next(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
+ForwardNode_t* csll_next(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
 	if (!node || !node->list || node->list != ll) return NULL;
 
 	ForwardNode_t* p = node->next;
@@ -128,15 +139,15 @@ ForwardNode_t* next(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
  * @param value
  * @return ForwardNode_t*
  */
-ForwardNode_t* push_back(CircularSinglyLinkedList* ll, void* value) {
-	ForwardNode_t* node = __make_node(value);
+ForwardNode_t* csll_push_back(CircularSinglyLinkedList* ll, void* value) {
+	ForwardNode_t* node = __csll_make_node(value);
 
-	if (!ll->head) return __new_head(ll, node);
+	if (!ll->head) return __csll_new_head(ll, node);
 
 	if (ll->head && ll->size == 1) {
 		ll->head->next = node;
 	} else {
-		ForwardNode_t* tmp = __find_node_before(ll, ll->head);
+		ForwardNode_t* tmp = __csll_find_node_before(ll, ll->head);
 		tmp->next = node;
 	}
 
@@ -155,12 +166,12 @@ ForwardNode_t* push_back(CircularSinglyLinkedList* ll, void* value) {
  * @param value
  * @return ForwardNode_t*
  */
-ForwardNode_t* push_front(CircularSinglyLinkedList* ll, void* value) {
-	ForwardNode_t* node = __make_node(value);
+ForwardNode_t* csll_push_front(CircularSinglyLinkedList* ll, void* value) {
+	ForwardNode_t* node = __csll_make_node(value);
 
-	if (!ll->head) return __new_head(ll, node);
+	if (!ll->head) return __csll_new_head(ll, node);
 
-	ForwardNode_t* tmp = __find_node_before(ll, ll->head);
+	ForwardNode_t* tmp = __csll_find_node_before(ll, ll->head);
 
 	node->next = ll->head;
 	ll->head = node;
@@ -184,7 +195,7 @@ ForwardNode_t* push_front(CircularSinglyLinkedList* ll, void* value) {
  * @param mark
  * @return int - 0 if success, else -1
  */
-int move_after(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark) {
+int csll_move_after(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark) {
 	if (!node || !mark) return -1;
 
 	if (node->list != ll || node == mark || mark->list != ll) {
@@ -193,7 +204,7 @@ int move_after(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t*
 
 	if (mark->next == node) return -1;
 
-	__move(ll, node, mark);
+	__csll_move(ll, node, mark);
 	return 0;
 }
 
@@ -209,7 +220,7 @@ int move_after(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t*
  * @param mark
  * @return int - 0 if success, else -1
  */
-int move_before(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark) {
+int csll_move_before(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t* mark) {
 	if (!node || !mark) return -1;
 
 	if (node->list != ll || node == mark || mark->list != ll) {
@@ -218,8 +229,8 @@ int move_before(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t
 
 	if (node->next == mark) return -1;
 
-	ForwardNode_t* tmp = __find_node_before(ll, mark);
-	__move(ll, node, tmp);
+	ForwardNode_t* tmp = __csll_find_node_before(ll, mark);
+	__csll_move(ll, node, tmp);
 	return 0;
 }
 
@@ -230,7 +241,7 @@ int move_before(CircularSinglyLinkedList* ll, ForwardNode_t* node, ForwardNode_t
  * @param node
  * @return ForwardNode_t*
  */
-ForwardNode_t* remove_node(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
+ForwardNode_t* csll_remove_node(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
 	if (!ll->head || !node) return NULL;
 
 	if (node->list != ll) return NULL;
@@ -267,14 +278,14 @@ ForwardNode_t* remove_node(CircularSinglyLinkedList* ll, ForwardNode_t* node) {
  * @param ll
  * @return ForwardNode_t*
  */
-ForwardNode_t* pop(CircularSinglyLinkedList* ll) {
+ForwardNode_t* csll_pop(CircularSinglyLinkedList* ll) {
 	if (!ll->head) return NULL;
 
 	ForwardNode_t* tmp = ll->head;
 
 	while (tmp->next != ll->head) tmp = tmp->next;
 
-	return remove_node(ll, tmp);
+	return csll_remove_node(ll, tmp);
 }
 
 /**
@@ -289,14 +300,14 @@ ForwardNode_t* pop(CircularSinglyLinkedList* ll) {
  * @param mark
  * @return ForwardNode_t*
  */
-ForwardNode_t* insert_after(CircularSinglyLinkedList* ll, void* value, ForwardNode_t* mark) {
+ForwardNode_t* csll_insert_after(CircularSinglyLinkedList* ll, void* value, ForwardNode_t* mark) {
 	if (!mark || mark->list != ll) return NULL;
 
-	ForwardNode_t* n = __make_node(value);
+	ForwardNode_t* n = __csll_make_node(value);
 
-	if (!ll->head) return __new_head(ll, n);
+	if (!ll->head) return __csll_new_head(ll, n);
 
-	ForwardNode_t* tmp = __find_node_before(ll, mark->next);
+	ForwardNode_t* tmp = __csll_find_node_before(ll, mark->next);
 
 	if (tmp->next == ll->head) {
 		tmp->next = n;
@@ -324,10 +335,10 @@ ForwardNode_t* insert_after(CircularSinglyLinkedList* ll, void* value, ForwardNo
  * @param mark
  * @return ForwardNode_t*
  */
-ForwardNode_t* insert_before(CircularSinglyLinkedList* ll, void* value, ForwardNode_t* mark) {
+ForwardNode_t* csll_insert_before(CircularSinglyLinkedList* ll, void* value, ForwardNode_t* mark) {
 	if (!mark || mark->list != ll) return NULL;
 
-	return insert_after(ll, value, prev(ll, mark));
+	return csll_insert_after(ll, value, csll_prev(ll, mark));
 }
 
 /**
@@ -339,13 +350,13 @@ ForwardNode_t* insert_before(CircularSinglyLinkedList* ll, void* value, ForwardN
  * @param other
  * @return CircularSinglyLinkedList*
  */
-CircularSinglyLinkedList* push_back_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other) {
+CircularSinglyLinkedList* csll_push_back_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other) {
 	if (!other || !ll) return NULL;
 
 	ForwardNode_t* n = other->head;
 
-	for (int i = other->size; i > 0; i--, n = next(other, n)) {
-		push_back(ll, n->data);
+	for (int i = other->size; i > 0; i--, n = csll_next(other, n)) {
+		csll_push_back(ll, n->data);
 	}
 
 	return ll;
@@ -360,13 +371,13 @@ CircularSinglyLinkedList* push_back_list(CircularSinglyLinkedList* ll, CircularS
  * @param other
  * @return CircularSinglyLinkedList*
  */
-CircularSinglyLinkedList* push_front_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other) {
+CircularSinglyLinkedList* csll_push_front_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other) {
 	if (!other || !ll) return NULL;
 
-	ForwardNode_t* n = prev(other, other->head);
+	ForwardNode_t* n = csll_prev(other, other->head);
 
-	for (int i = other->size; i > 0; i--, n = prev(other, n)) {
-		push_front(ll, n->data);
+	for (int i = other->size; i > 0; i--, n = csll_prev(other, n)) {
+		csll_push_front(ll, n->data);
 	}
 
 	return ll;
@@ -378,7 +389,7 @@ CircularSinglyLinkedList* push_front_list(CircularSinglyLinkedList* ll, Circular
  * @param ll
  * @param callback
  */
-void iterate(CircularSinglyLinkedList* ll, void (*callback)(void*)) {
+void csll_iterate(CircularSinglyLinkedList* ll, void (*callback)(void*)) {
 	ForwardNode_t* n = ll->head;
 
 	do {
