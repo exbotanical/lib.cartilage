@@ -96,10 +96,10 @@ LinkedList* test_csll_push_back_2(LinkedList* ll) {
 	int iterations = 4;
 
 	for (int i = iterations; i > 0; i--) {
-		csll_push_back(ll, (void*)randch());
+		csll_push_back(ll, randch());
 	}
 
-	Node* n = csll_push_back(ll, (void*)randch());
+	Node* n = csll_push_back(ll, randch());
 
 	ASSERT(n->next == ll->head, "inserts a node as the last node in a non-empty list");
 	ASSERT(ll->size == iterations + 1, "maintains proper list size");
@@ -110,7 +110,7 @@ LinkedList* test_csll_push_back_2(LinkedList* ll) {
 LinkedList* test_csll_push_front(LinkedList* ll) {
 	DESCRIBE();
 
-	Node *n = csll_push_front(ll, (void*)randch());
+	Node *n = csll_push_front(ll, randch());
 
 	ASSERT(n->next == ll->head, "a) inserts a node as the head when the list is empty");
 	ASSERT(n == ll->head->next, "b) inserts a node as the head when the list is empty");
@@ -126,10 +126,10 @@ LinkedList* test_csll_push_front_2(LinkedList* ll) {
 	int iterations = 4;
 
 	for (int i = iterations; i > 0; i--) {
-		csll_push_front(ll, (void*)randch());
+		csll_push_front(ll, randch());
 	}
 
-	Node* n = csll_push_front(ll, (void*)randch());
+	Node* n = csll_push_front(ll, randch());
 
 	ASSERT(n == ll->head, "a) inserts a node as the head in a non-empty list");
 	ASSERT(n->next == ll->head->next, "b) inserts a node as the head in a non-empty list");
@@ -148,9 +148,9 @@ LinkedList* test_head(LinkedList* ll) {
 	ASSERT(value == ll->head->data, "value congruence");
 	ASSERT(value == n->data, "value congruence");
 
-	csll_push_front(ll, (void*)randch());
-	csll_push_front(ll, (void*)randch());
-	csll_push_front(ll, (void*)randch());
+	csll_push_front(ll, randch());
+	csll_push_front(ll, randch());
+	csll_push_front(ll, randch());
 
 	Node *n1 = csll_push_front(ll, value);
 
@@ -166,10 +166,10 @@ LinkedList* test_head(LinkedList* ll) {
 LinkedList* test_multi_node_ll(LinkedList* ll) {
 	DESCRIBE();
 
-	Node* n2 = csll_push_front(ll, (void*)randch());
-	Node* n1 = csll_push_front(ll, (void*)randch());
-	Node* n3 = csll_push_back(ll, (void*)randch());
-	Node* n4 = csll_push_back(ll, (void*)randch());
+	Node* n2 = csll_push_front(ll, randch());
+	Node* n1 = csll_push_front(ll, randch());
+	Node* n3 = csll_push_back(ll, randch());
+	Node* n4 = csll_push_back(ll, randch());
 
 	assert_ordinal_pointers(ll, 4, n1, n2, n3, n4);
 
@@ -187,11 +187,11 @@ LinkedList* test_multi_node_ll(LinkedList* ll) {
 	assert(t1 == n4);
 	assert_ordinal_pointers(ll, 1, n3);
 
-	assert(csll_insert_after(ll, (void*)randch(), t1) == NULL); // no-op
+	assert(csll_insert_after(ll, randch(), t1) == NULL); // no-op
 
 	assert(ll->head == csll_prev(ll, ll->head)); // head = tail
 
-	n2 = csll_insert_after(ll, (void*)randch(), n3); // insert after tail
+	n2 = csll_insert_after(ll, randch(), n3); // insert after tail
 	assert_ordinal_pointers(ll, 2, n3, n2);
 
 	assert(csll_prev(ll, ll->head) == n2);
@@ -202,15 +202,15 @@ LinkedList* test_multi_node_ll(LinkedList* ll) {
 	assert(n4->next == ll->head);
 	assert(csll_prev(ll, n3) == n4);
 
-	Node *n5 = csll_insert_after(ll, (void*)randch(), n2); // insert after head
+	Node *n5 = csll_insert_after(ll, randch(), n2); // insert after head
 	assert_ordinal_pointers(ll, 4, n3, n2, n5, n4);
 
 	csll_remove_node(ll, n2);
-	n2 = csll_insert_after(ll, (void*)randch(), n5); // insert after middle
+	n2 = csll_insert_after(ll, randch(), n5); // insert after middle
 	assert_ordinal_pointers(ll, 4, n3, n5, n2, n4);
 
 	csll_remove_node(ll, n2);
-	n2 = csll_insert_after(ll, (void*)randch(), n4); // insert after tail
+	n2 = csll_insert_after(ll, randch(), n4); // insert after tail
 	assert_ordinal_pointers(ll, 4, n3, n5, n4, n2);
 
 	csll_remove_node(ll, n2);
@@ -224,11 +224,11 @@ LinkedList* test_multi_node_ll(LinkedList* ll) {
 	assert(csll_pop(ll) == NULL); // no-op
 	assert(ll->size == 0);
 
-	assert(csll_insert_before(ll, (void*)randch(), n5) == NULL); // no-op
+	assert(csll_insert_before(ll, randch(), n5) == NULL); // no-op
 
-	Node* m2 = csll_push_front(ll, (void*)randch());
-	Node* m3 = csll_push_back(ll, (void*)randch());
-	Node* m1 = csll_push_front(ll, (void*)randch());
+	Node* m2 = csll_push_front(ll, randch());
+	Node* m3 = csll_push_back(ll, randch());
+	Node* m1 = csll_push_front(ll, randch());
 
 	assert_ordinal_pointers(ll, 3, m1, m2, m3);
 
@@ -240,7 +240,7 @@ void increment(Node* n) {
 }
 
 void assert_n(Node* n) {
-	ASSERT(n->data == 'Z', "iterator updated value");
+	ASSERT(n->data == (char*)'Z', "iterator updated value");
 }
 
 LinkedList* test_iteration(LinkedList* ll) {
@@ -248,9 +248,9 @@ LinkedList* test_iteration(LinkedList* ll) {
 
 	char n1 = 'A', n2 = 'B', n3 = 'C';
 
-	csll_push_front(ll, (void*)n1);
-	csll_push_front(ll, (void*)n2);
-	csll_push_front(ll, (void*)n3);
+	csll_push_front(ll, n1);
+	csll_push_front(ll, n2);
+	csll_push_front(ll, n3);
 
 	Node* n = ll->head;
 
@@ -267,12 +267,12 @@ LinkedList* test_extensibility(LinkedList* ll) {
 	LinkedList* l3 = csll_make_list();
 	LinkedList* l4 = csll_make_list();
 
-	csll_push_back(ll, (void*)'A');
-	csll_push_back(ll, (void*)'B');
-	csll_push_back(ll, (void*)'C');
+	csll_push_back(ll, 'A');
+	csll_push_back(ll, 'B');
+	csll_push_back(ll, 'C');
 
-	csll_push_back(l2, (void*)'D');
-	csll_push_back(l2, (void*)'E');
+	csll_push_back(l2, 'D');
+	csll_push_back(l2, 'E');
 
 	csll_push_back_list(l3, ll); // merge into an empty list
 	assert_ordinal_data(l3, 3, 'A', 'B', 'C');
@@ -302,8 +302,8 @@ LinkedList* test_extensibility(LinkedList* ll) {
 LinkedList* test_removal(LinkedList* ll) {
 	DESCRIBE();
 
-	Node* n1 = csll_push_back(ll, (void*)'A');
-	Node* n2 = csll_push_back(ll, (void*)'B');
+	Node* n1 = csll_push_back(ll, 'A');
+	Node* n2 = csll_push_back(ll, 'B');
 
 	assert_ordinal_pointers(ll, 2, n1, n2);
 
@@ -325,11 +325,11 @@ LinkedList* test_noop(LinkedList* ll) {
 
 	LinkedList* l2 = csll_make_list();
 
-	csll_push_back(ll, (void*)'A');
-	csll_push_back(ll, (void*)'B');
+	csll_push_back(ll, 'A');
+	csll_push_back(ll, 'B');
 
-	csll_push_back(l2, (void*)'C');
-	csll_push_back(l2, (void*)'D');
+	csll_push_back(l2, 'C');
+	csll_push_back(l2, 'D');
 
 	Node* n = ll->head;
 	csll_remove_node(l2, n); // l2 should not change because n is not a node of l2
@@ -337,7 +337,7 @@ LinkedList* test_noop(LinkedList* ll) {
 	int s1 = l2->size;
 	ASSERT(s1 == 2, "size should remain unaffected given no-ops");
 
-	csll_insert_before(ll, (void*)'A', n);
+	csll_insert_before(ll, 'A', n);
 
 	int s2 = ll->size;
 	ASSERT(s2 == 3, "size should remain unaffected given no-ops");
@@ -352,10 +352,10 @@ LinkedList* test_noop(LinkedList* ll) {
 LinkedList* test_move(LinkedList* ll) {
 	DESCRIBE();
 
-	Node* n1 = csll_push_back(ll, (void*)'A');
-	Node* n2 = csll_push_back(ll, (void*)'B');
-	Node* n3 = csll_push_back(ll, (void*)'C');
-	Node* n4 = csll_push_back(ll, (void*)'D');
+	Node* n1 = csll_push_back(ll, 'A');
+	Node* n2 = csll_push_back(ll, 'B');
+	Node* n3 = csll_push_back(ll, 'C');
+	Node* n4 = csll_push_back(ll, 'D');
 
 	csll_move_after(ll, n3, n3); // noop
 	assert_ordinal_pointers(ll, 4, n1, n2, n3, n4);
@@ -383,10 +383,10 @@ LinkedList* test_move(LinkedList* ll) {
 LinkedList* test_modification(LinkedList* ll) {
 	DESCRIBE();
 
-	csll_push_back(ll, (void*)'A');
-	csll_push_back(ll, (void*)'B');
-	csll_push_back(ll, (void*)'C');
-	csll_insert_after(ll, (void*)randch(), __csll_make_node((void*)randch()));
+	csll_push_back(ll, 'A');
+	csll_push_back(ll, 'B');
+	csll_push_back(ll, 'C');
+	csll_insert_after(ll, randch(), __csll_make_node(randch()));
 
 	assert_ordinal_data(ll, 3, 'A', 'B', 'C');
 
@@ -395,8 +395,8 @@ LinkedList* test_modification(LinkedList* ll) {
 	LinkedList* l1 = csll_make_list();
 	LinkedList* l2 = csll_make_list();
 
-	Node* n1 = csll_push_back(l1, (void*)'A');
-	Node* n2 = csll_push_back(l2, (void*)'B');
+	Node* n1 = csll_push_back(l1, 'A');
+	Node* n2 = csll_push_back(l2, 'B');
 
 	csll_move_after(l1, n1, n2);
 	assert_ordinal_data(l1, 1, 'A');
@@ -436,7 +436,7 @@ LinkedList* test_modification(LinkedList* ll) {
 LinkedList* test_single_node_ll(LinkedList* ll) {
 	DESCRIBE();
 
-	Node* n = csll_push_front(ll, (void*)'B');
+	Node* n = csll_push_front(ll, 'B');
 
 	ASSERT(csll_next(ll, n) == n, "points to itself");
 	ASSERT(csll_prev(ll, n) == n, "points to itself");
@@ -444,7 +444,7 @@ LinkedList* test_single_node_ll(LinkedList* ll) {
 	assert_ordinal_pointers(ll, 1, n);
 
 	LinkedList* l2 = csll_make_list();
-	Node* n2 = csll_push_front(l2, (void*)'A');
+	Node* n2 = csll_push_front(l2, 'A');
 
 	assert_ordinal_pointers(l2, 1, n2);
 
@@ -456,7 +456,7 @@ LinkedList* test_single_node_ll(LinkedList* ll) {
 
 	LinkedList* l3 = csll_make_list();
 
-	Node* n3 = csll_push_front(l3, (void*)'B');
+	Node* n3 = csll_push_front(l3, 'B');
 
 	ASSERT(csll_next(l3, n3) == n3, "points to itself");
 	ASSERT(csll_prev(l3, n3) == n3, "points to itself");

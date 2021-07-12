@@ -23,7 +23,6 @@ not_test_file () {
 run_test () {
 	local file_name="$1"
 
-	make unix
 	gcc -I ./src/ -c "$TESTING_DIR/$file_name" -o main.o
 	gcc -o main main.o -L./ -l cartilage
 
@@ -34,7 +33,15 @@ run_test () {
 }
 
 main () {
-	echo $(ls $TESTING_DIR | filter not_test_file) | for_each run_test
+	# echo $(ls $TESTING_DIR | filter not_test_file)) | for_each run_test
+
+	tests=(
+		'circular_singly_ll_test.c'
+		'glthread_test.c'
+	)
+
+	make unix
+	for_each run_test ${tests[*]}
 }
 
 . "$(dirname "$(readlink -f "$BASH_SOURCE")")"/$UTIL_F

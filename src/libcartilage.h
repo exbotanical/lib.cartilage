@@ -179,12 +179,88 @@ CircularSinglyLinkedList* csll_push_front_list(CircularSinglyLinkedList* ll, Cir
  *	GlThread
  *****************************/
 
+/**
+ * @brief glthread meta container
+ */
 typedef struct glthread {
 	struct glthread* prev;
 	struct glthread* next;
 } glthread_t;
 
-void glthread_insert_after(glthread_t* base, glthread_t*next);
+/**
+ * @brief Initialize a new glthread
+ *
+ * @param glthread
+ */
+void glthread_init(glthread_t* glthread);
 
-// void glthread_insert_before()
+/**
+ * @brief Insert a new glthread node after the given mark
+ *
+ * @param mark
+ * @param next
+ */
+void glthread_insert_after(glthread_t* mark, glthread_t* next);
+
+/**
+ * @brief Insert a new glthread node before the given mark
+ *
+ * @param mark
+ * @param next
+ */
+void glthread_insert_before(glthread_t* mark, glthread_t* next);
+
+/**
+ * @brief Remove a given glthread node
+ *
+ * @param mark
+ */
+void glthread_remove(glthread_t* mark);
+
+/**
+ * @brief Push new glthread node to tail
+ *
+ * @param head
+ * @param next
+ */
+void glthread_push(glthread_t* head, glthread_t* next);
+
+/**
+ * @brief Delete all nodes in a given glthread
+ *
+ * @param head
+ */
+void glthread_del_list(glthread_t* head);
+
+/**
+ * @brief Get current size of glthread
+ *
+ * @param head
+ * @return unsigned int
+ */
+unsigned int glthread_size(glthread_t* head);
+
+/**
+ * @brief Prioritized insertion
+ *
+ * @param head
+ * @param glthread
+ * @param comparator
+ * @param offset
+ */
+void glthread_priority_insert(
+	glthread_t* head,
+	glthread_t* glthread,
+	int(*comparator)(void*, void*),
+	int offset
+);
+
+/**
+ * @brief Dequeue the head node
+ *
+ * @param head
+ * @return glthread_t*
+ */
+glthread_t* glthread_dequeue_first(glthread_t* head);
+
 #endif

@@ -20,10 +20,13 @@ yellow () {
 
 for_each () {
   local fn=$1
-  local arg
 
-  while read -r arg; do
-    $fn $arg
+  shift
+
+  local -a arr=($@)
+
+  for item in "${arr[@]}"; do
+    $fn $item
   done
 }
 
