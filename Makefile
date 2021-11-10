@@ -1,11 +1,12 @@
 CC=gcc
-CFLAGS=-g -fPIC -Ideps -Wall -Wextra -pedantic -std=c17
+CFLAGS=-g -fPIC -Wall -Wextra -pedantic -std=c17
 LDFLAGS=-shared -o
 
 WIN_BIN=lib_cartilage.dll
 UNIX_BIN=libcartilage.so
 
 OBJFILES=$(wildcard src/*.c)
+
 TESTS = $(patsubst %.c, %, $(wildcard t/*.c))
 
 all: unix

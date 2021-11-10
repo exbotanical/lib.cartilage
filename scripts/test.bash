@@ -23,7 +23,7 @@ not_test_file () {
 run_test () {
 	local file_name="$1"
 
-	gcc -I ./src/ -c "$TESTING_DIR/$file_name" -o main.o
+	gcc -Isrc -c "$TESTING_DIR/$file_name" -o main.o
 	gcc -o main main.o -L./ -l cartilage
 
 	export LD_LIBRARY_PATH=$HOME/repositories/cartilage/src/:$LD_LIBRARY_PATH

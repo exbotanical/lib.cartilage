@@ -48,7 +48,9 @@ void assert_ordinal_pointers(LinkedList* ll, int nodes_n, ...) {
 		tmp = tmp->next;
 	} while (--iterations);
 
-	ASSERT(ll->size == nodes_n, "has the expected list order and size");
+	char* msg = "has the expected list order and size";
+
+	ASSERT(ll->size == nodes_n, msg);
 
 	va_end(args);
 }
@@ -69,7 +71,8 @@ void assert_ordinal_data(LinkedList* ll, int vals_n, ...) {
 		tmp = tmp->next;
 	} while (--iterations);
 
-	ASSERT(ll->size == vals_n, "has the expected list order and size");
+	char* msg = "has the expected list order and size";
+	ASSERT(ll->size == vals_n, msg);
 
 	va_end(args);
 }
@@ -87,6 +90,7 @@ LinkedList* test_csll_push_back(LinkedList* ll) {
 	ASSERT(n->next->data == ll->head->data, "maintains rule such that tail->next == head");
 
 	ASSERT(ll->size == 1, "maintains proper list size");
+
 	return ll;
 }
 
