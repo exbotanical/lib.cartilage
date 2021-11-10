@@ -2,6 +2,20 @@
 
 classical implementations of list and ring data structures for the C programming language
 
+# Install
+
+Via [clib](https://github.com/clibs/clib/):
+
+```bash
+clib install MatthewZito/lib.cartilage
+```
+
+From Source:
+```bash
+git clone https://github.com/MatthewZito/lib.cartilage
+cd lib.cartilage && make
+```
+
 ## Dynamic Linking
 
 Linking to `lib.cartilage`:
@@ -233,7 +247,14 @@ CircularSinglyLinkedList* csll_push_back_list(CircularSinglyLinkedList* ll, Circ
 CircularSinglyLinkedList* csll_push_front_list(CircularSinglyLinkedList* ll, CircularSinglyLinkedList* other);
 ```
 
-### GlThread (aka 'Glue Linked List')
+### GlThread
+
+This data structure is a linked list that points to a memory offset (at which the node data resides) instead of an address; it is thereby leaner than a traditional linked list.
+
+Other advantages include:
+
+- accommodates being referenced by multiple data structures
+- data objects' memory can be freed without the need to remove multiple pointer references
 
 ```c
 /**

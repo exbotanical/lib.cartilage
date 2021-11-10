@@ -37,7 +37,7 @@ main () {
 
 	tests=(
 		'circular_singly_ll_test.c'
-		'glthread_test.c'
+		# 'glthread_test.c'
 	)
 
 	make unix

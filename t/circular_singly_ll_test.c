@@ -315,7 +315,7 @@ LinkedList* test_removal(LinkedList* ll) {
 	csll_remove_node(ll, n);
 	assert_ordinal_pointers(ll, 1, n2);
 
-	ASSERT(1 == 1, "maintains integrity across varietied removals");
+	ASSERT(1 == 1, "maintains integrity across various removals");
 
 	return ll;
 }
@@ -375,7 +375,7 @@ LinkedList* test_move(LinkedList* ll) {
 	csll_move_before(ll, n4, n1);
 	assert_ordinal_pointers(ll, 4, n1, n3, n2, n4);
 
-	ASSERT(1 == 1, "maintains integrity across varietied moves");
+	ASSERT(1 == 1, "maintains integrity across various moves");
 
 	return ll;
 }

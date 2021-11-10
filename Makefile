@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -fPIC
+CFLAGS=-g -fPIC -Ideps -Wall -Wextra -pedantic -std=c17
 LDFLAGS=-shared -o
 
 WIN_BIN=lib_cartilage.dll
@@ -17,4 +17,10 @@ win:
 	$(CC) $(CFLAGS) $(OBJFILES) $(LDFLAGS) $(WIN_BIN)
 
 clean:
-	rm $(TARGET)
+	rm -f $(TARGET) $(UNIX_BIN) $(WIN_BIN) main main.o 
+
+test: 
+	./scripts/test.bash 
+	$(MAKE) clean
+
+.PHONY: test clean 
