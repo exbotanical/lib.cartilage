@@ -13,22 +13,6 @@
 
 #include <stdlib.h>
 
-#define IS_GLTHREAD_EMPTY(glthreadptr) ((glthreadptr)->next == 0 && (glthreadptr)->prev == 0)
-
-#define BASE(glthreadptr) ((glthreadptr)->next)
-
-#define ITERATE_GLTHREAD_BEGIN(glthreadbegin, glthreadptr) {                                      \
-	glthread_t* _glthread_ptr = NULL;                                                               \
-	glthreadptr = BASE(glthreadbegin);                                                              \
-	                                                                                                \
-	for (; glthreadptr; glthreadptr = _glthread_ptr) {                                              \
-		_glthread_ptr = (glthreadptr)->next;                                                          \
-
-#define ITERATE_GLTHREAD_END(glthreadend, glthreadptr)                                            \
-	}}
-
-#define GET_DATA_FROM_OFFSET(glthreadptr, offset) (void*)((char*)(glthreadptr) - offset)
-
 /**
  * @brief Initialize a new glthread
  *
