@@ -1,8 +1,8 @@
 {
   "name": "lib.cartilage",
   "version": "0.0.2",
-  "author": "Matthew Zito (goldmund)",
-  "repo": "MatthewZito/lib.cartilage",
+  "author": "Matthew Zito",
+  "repo": "exbotanical/lib.cartilage",
   "license": "MIT",
   "description": "A library of various linked list data structures",
   "keywords": [

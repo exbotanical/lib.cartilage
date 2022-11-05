@@ -7,12 +7,12 @@ classical implementations of list and ring data structures for the C programming
 Via [clib](https://github.com/clibs/clib/):
 
 ```bash
-clib install MatthewZito/lib.cartilage
+clib install exbotanical/lib.cartilage
 ```
 
 From Source:
 ```bash
-git clone https://github.com/MatthewZito/lib.cartilage
+git clone https://github.com/exbotanical/lib.cartilage
 cd lib.cartilage && make
 ```
 
